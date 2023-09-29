@@ -15,8 +15,7 @@ export const CreateAccount = () => {
 
     const signUpFunction = (e) => {
         e.PreventDefault();
-
-        console.log('submitted', username, profileimg, email, password, publicProfile, privateProfile)
+        actions.createAccount(username, profileimg, email, password, publicProfile, privateProfile);
     }
 
     return (

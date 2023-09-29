@@ -4,7 +4,7 @@ import bookswaplogo from "../../img/logo-final-project.png";
 import "../../styles/forms.css";
 
 export const Login = () => {
-	const { store, actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -12,11 +12,11 @@ export const Login = () => {
     const loginFunction = (e) => {
         e.PreventDefault();
 
-        console.log('submitted', email, password)
+        actions.login(email, password);
     }
 
-	return (
-		<div className="container text-center">
+    return (
+        <div className="container text-center">
             <img src={bookswaplogo} alt="bookswap" height="100" />
             <div className="row justify-content-center">
                 <div className="createaccountform col-md-6">
@@ -40,8 +40,8 @@ export const Login = () => {
                     </form>
                 </div>
             </div>
-		</div>
-	);
+        </div>
+    );
 };
 
 export default Login; 
