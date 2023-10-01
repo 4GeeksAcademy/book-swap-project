@@ -10,12 +10,10 @@ export const CreateAccount = () => {
     const [profileimg, setProfileimg] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [publicProfile, setPublicProfile] = useState("");
-    const [privateProfile, setPrivateProfile] = useState("");
 
     const signUpFunction = (e) => {
-        e.PreventDefault();
-        actions.createAccount(username, profileimg, email, password, publicProfile, privateProfile);
+        e.preventDefault();
+        actions.createAccount(username, profileimg, email, password);
     }
 
     return (
@@ -23,6 +21,7 @@ export const CreateAccount = () => {
             <img src={bookswaplogo} alt="bookswap" height="100" />
             <div className="row justify-content-center">
                 <div className="createaccountform  col-md-6">
+
                     <form className="row g-3 text-start" onSubmit={signUpFunction}>
 
                         <div className="col-md-6">
@@ -33,10 +32,7 @@ export const CreateAccount = () => {
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="profileimg" className="form-label">Choose your profile photo</label>
-                            <input className="form-control" type="file" onChange={(e) => setProfileimg(e.target.value)} id="profileimg" required />
-                        </div>
+                       
 
                         <div className="col-12">
                             <label for="email" className="form-label">Email</label>
@@ -46,22 +42,6 @@ export const CreateAccount = () => {
                         <div className="col-md-12">
                             <label for="password" className="form-label">Password</label>
                             <input type="password" onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" required />
-                        </div>
-
-                        <div className="col-12">
-                            <label for="form-check" className="form-label">Choose your privacy</label>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(e) => setPublicProfile(e.target.value)} name="flexRadioDefault" id="publicprofile" checked />
-                                <label className="form-check-label" for="publicprofile">
-                                    Public Profile
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(e) => setPrivateProfile(e.target.value)} name="flexRadioDefault" id="privateprofile" />
-                                <label className="form-check-label" for="privateprofile">
-                                    Private Profile
-                                </label>
-                            </div>
                         </div>
 
                         <div className="col-12">

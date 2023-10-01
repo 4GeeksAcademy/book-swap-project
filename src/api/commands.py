@@ -1,5 +1,5 @@
 import click
-from api.models import db, user
+from api.models import db, User
 """
 In this file, you can add as many commands as you want using the @app.cli.command decorator
 Flask commands are usefull to run cronjobs or tasks outside of the API but sill in integration
@@ -16,7 +16,7 @@ def setup_commands(app):
     def insert_test_users(count):
         print("Creating test users")
         for x in range(1, int(count) + 1):
-            User = user()
+            User = User()
             User.email = "test_user" + str(x) + "@test.com"
             User.password = "123456"
             User.is_active = True

@@ -16,7 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 
-			token:null,
+			token: null,
 			//user: {},
 			//friendship: [],
 			//wishlist: [],
@@ -55,11 +55,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ demo: demo });
 			},
 
-			createAccount: (email, username, password, profile_picture, public_profile) => {
+			createAccount: (username, profileimg, email, password) => {
 				var options = {
 					method: 'POST',
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ email: email, username: username, password: password, profile_picture: profile_picture, public_profile: public_profile })
+					body: JSON.stringify({ username: username, profileimg: profileimg, email: email, password: password })
 				}
 
 				fetch(process.env.BACKEND_URL + 'api/register', options)
@@ -87,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				var options = {
 					method: 'POST',
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ email: email, password: password})
+					body: JSON.stringify({ email: email, password: password })
 				}
 
 				fetch(process.env.BACKEND_URL + 'api/token', options)

@@ -6,9 +6,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)  
-    profile_picture = db.Column(db.String(250), nullable=False) 
-    public_profile = db.Column(db.Boolean, default=False)  
-    is_active = db.Column(db.Boolean, default=True)  
+    is_active = db.Column(db.Boolean, default=True) 
     def __repr__(self):
         return f'<user {self.email}>'
     def serialize(self):
@@ -25,8 +23,8 @@ class Books(db.Model):
     genre = db.Column(db.Integer, db.ForeignKey("genres.genre_id"), nullable=False)
     avg_rating = db.Column(db.Float, nullable=False) 
     total_ratings = db.Column(db.Integer, nullable=False) 
-    cover_img = db.Column(db.Enum('jpg', 'png', 'gif', 'other'), nullable=False)
-    status = db.Column(db.Enum('Available', 'Not Available'), nullable=False)
+    cover_img = db.Column(db.String(500), nullable=False)
+    status = db.Column(db.Enum('Available', 'Not Available', name='status_type'), nullable=False)
     def __repr__(self):
         return f'<Book {self.title}>'
     def serialize(self):
@@ -89,7 +87,7 @@ class BookSwapRequest(db.Model):
     sender_user_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     receiver_user_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
-    request_status = db.Column (db.Enum('Accepted', 'Pending', 'Rejected'), nullable=False)
+    request_status = db.Column (db.Enum('Accepted', 'Pending', 'Rejected', name='request_type'), nullable=False)
     def __repr__(self):
         return f'<BookSwapRequest {self.request_id}>'
     def serialize(self):
@@ -104,7 +102,7 @@ class Friendship(db.Model):
     friendship_id = db.Column(db.Integer, primary_key=True)
     user1_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
     user2_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
-    friendship_status = db.Column (db.Enum('Accepted', 'Pending', 'Rejected'), nullable=False)
+    friendship_status = db.Column (db.Enum('Accepted', 'Pending', 'Rejected', name='friendship_type'), nullable=False)
     def __repr__(self):
         return f'<Friendship {self.friendship_id}>'
     def serialize(self):
