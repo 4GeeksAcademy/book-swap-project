@@ -10,7 +10,7 @@ export const Login = () => {
     const [password, setPassword] = useState("");
 
     const loginFunction = (e) => {
-        e.PreventDefault();
+        e.preventDefault();
 
         actions.login(email, password);
     }

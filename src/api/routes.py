@@ -30,6 +30,7 @@ def create_user():
         email=data.get("email"),
         username=data.get("username"),
         password=data.get("password"),
+        profileimg=data.get("profileimg"),
         is_active=True
     )
 

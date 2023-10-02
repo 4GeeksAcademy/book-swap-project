@@ -22,7 +22,7 @@ export const CreateAccount = () => {
             <div className="row justify-content-center">
                 <div className="createaccountform  col-md-6">
 
-                    <form className="row g-3 text-start" onSubmit={signUpFunction}>
+                    <form className="row g-3 text-start" method="POST" action="/register" enctype="multipart/form-data" onSubmit={signUpFunction}>
 
                         <div className="col-md-6">
                             <label className="form-label" for="username">Choose Your Username</label>
@@ -32,7 +32,10 @@ export const CreateAccount = () => {
                             </div>
                         </div>
 
-                       
+                        <div class="col-md-6">
+                            <label for="profileimg" className="form-label">Choose your profile photo</label>
+                            <input className="form-control" type="file" onChange={(e) => setProfileimg(e.target.value)} id="profileimg" required />
+                        </div>
 
                         <div className="col-12">
                             <label for="email" className="form-label">Email</label>
