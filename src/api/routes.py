@@ -29,6 +29,8 @@ def create_user():
     new_user = User(
         email=data.get("email"),
         username=data.get("username"),
+        name=data.get("name"),
+        lastname=data.get("lastname"),
         password=data.get("password"),
         profileimg=data.get("profileimg"),
         is_active=True
