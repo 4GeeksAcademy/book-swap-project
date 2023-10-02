@@ -16,7 +16,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 
-			token: null,
 			//user: {},
 			//friendship: [],
 			//wishlist: [],
