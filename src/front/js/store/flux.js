@@ -1,7 +1,8 @@
+import { redirect } from "react-router-dom";
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			token: null,
 			message: null,
 			demo: [
 				{
@@ -16,6 +17,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			],
 
+			token: null,
 			//user: {},
 			//friendship: [],
 			//wishlist: [],
@@ -60,7 +62,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ username: username, profileimg: profileimg, email: email, password: password })
 				}
-
 				fetch(process.env.BACKEND_URL + 'api/register', options)
 
 					.then(response => {
@@ -88,7 +89,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ email: email, password: password })
 				}
-
 				fetch(process.env.BACKEND_URL + 'api/token', options)
 
 					.then(response => {
@@ -96,12 +96,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 						else throw Error('Something went wrong with the login')
 					})
 					.then(data => {
-						localStorage.setItem("token", data.token);
-						setStore({ token: data.token });
+						localStorage.setItem("token", data.access_token);
+						setStore({ token: data.access_token });
 					})
 					.catch(error => {
 						console.log(error)
 					})
+			},
+
+			isLoggedIn: () => {
+				//get the store
+				const store = getStore();
+			return store.token !=null
 			},
 
 			loadAllFriends: () => {
@@ -144,12 +150,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						else throw Error('Something went wrong');
 					})
 					.then(data => {
-						console.log(data)
-						if (data && data.results && data.results.lists) setBooks(data.results.lists);
+						if (data && data.results && data.results.lists) {
+							const books = data.results.lists.map(list => list.books).flat();
+							setBooks(books);
+						}
 					})
 					.catch(error => {
 						alert("ERROR: Something went wrong");
-					})
+					});
 			},
 
 			getGenres: (setGenres) => {

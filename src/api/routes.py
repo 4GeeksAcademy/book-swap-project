@@ -3,12 +3,17 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, Blueprint, redirect, url_for
 from api.models import db, User, Books, BookGoals, BookOwner, BookRecommendations, BookSwapRequest, Friendship, Wishlist, Genres, Reviews
+from flask import Flask, request, jsonify, Blueprint, redirect, url_for
+from api.models import db, User, Books, BookGoals, BookOwner, BookRecommendations, BookSwapRequest, Friendship, Wishlist, Genres, Reviews
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import get_jwt_identity, create_access_token, jwt_required, JWTManager
 from io import BytesIO
 from flask import Flask, render_template, request, send_file
 
 api = Blueprint('api', __name__)
+
+# Route to upload a file
+
 
 # Route to upload a file
 
@@ -20,11 +25,13 @@ api = Blueprint('api', __name__)
 def create_user():
     data = request.get_json()
     print(data)
+    print(data)
     if not data:
         return jsonify({"message": "Invalid request data"}), 400
     # Check if the provided email already exists in the database
     existing_user = User.query.filter_by(email=data.get("email")).first()
     if existing_user:
+        return jsonify({"message": "Email already registered"}), 401
         return jsonify({"message": "Email already registered"}), 401
     new_user = User(
         email=data.get("email"),
@@ -36,6 +43,7 @@ def create_user():
         is_active=True
     )
 
+    print(new_user)
     print(new_user)
     db.session.add(new_user)
     db.session.commit()
@@ -63,6 +71,7 @@ def get_all_users():
     return jsonify(user_list), 200
 # GET one user public version
 @api.route('/users/<int:user_id>', methods=['GET'])
+@api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -70,6 +79,8 @@ def get_user(user_id):
         return jsonify(user.serialize()), 200
     else:
         return jsonify({"User not found"}), 404
+# GET user info
+@api.route('/user_information', methods=['GET'])
 # GET user info
 @api.route('/user_information', methods=['GET'])
 @jwt_required()
@@ -83,8 +94,12 @@ def get_user_information():
     return jsonify(user), 200
 # DELETE user
 @api.route('/users/<int:user_id>', methods=['DELETE'])
+@api.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(user_id):
+    token_user_id = get_jwt_identity()
+    if token_user_id != user_id:
+        return jsonify({"Not allowed to delete"}), 403
     user = User.query.get(user_id)
     if user:
         db.session.delete(user)
@@ -94,12 +109,14 @@ def delete_user(user_id):
         return jsonify({"User not found"}), 404
 # GET all books
 @api.route('/books', methods=['GET'])
+@api.route('/books', methods=['GET'])
 @jwt_required()
 def get_all_books():
     books = Books.query.all()
     results = [book.serialize() for book in books]
     return jsonify(results), 200
 # GET a specific book
+@api.route('/books/<int:book_id>', methods=['GET'])
 @api.route('/books/<int:book_id>', methods=['GET'])
 @jwt_required()
 def get_book(book_id):
@@ -110,6 +127,7 @@ def get_book(book_id):
         return jsonify({"Book not found"}), 404
 # GET all the favorites/wishlist that belong to a current user
 @api.route('/users/wishlist', methods=['GET'])
+@api.route('/users/wishlist', methods=['GET'])
 @jwt_required()
 def get_user_wishlist():
     user_id = get_jwt_identity()
@@ -117,6 +135,7 @@ def get_user_wishlist():
     serialized_wishlist = [book.serialize() for book in wishlist]
     return jsonify(serialized_wishlist), 200
 # POST to add a book to the wishlist
+@api.route('/wishlist/book/<int:book_id>', methods=['POST'])
 @api.route('/wishlist/book/<int:book_id>', methods=['POST'])
 @jwt_required()
 def add_wishlist_book(book_id):
@@ -135,6 +154,7 @@ def add_wishlist_book(book_id):
     return jsonify({"Book planet added"}), 201
 # DELETE to remove a specific book from the wishlist
 @api.route('/wishlist/book/<int:book_id>', methods=['DELETE'])
+@api.route('/wishlist/book/<int:book_id>', methods=['DELETE'])
 @jwt_required()
 def delete_wishlist_book(book_id):
     user_id = get_jwt_identity()
@@ -148,6 +168,7 @@ def delete_wishlist_book(book_id):
     else:
         return jsonify({"Wishlist book not found"}), 404
 # POST to accept book swap request
+@api.route('/book_swap_requests/<int:request_id>/accept', methods=['POST'])
 @api.route('/book_swap_requests/<int:request_id>/accept', methods=['POST'])
 @jwt_required()
 def accept_book_swap_request(request_id):
@@ -163,6 +184,7 @@ def accept_book_swap_request(request_id):
     db.session.commit()
     return jsonify({"Book swap request accepted"}), 200
 # DELETE to decline book swap request
+@api.route('/book_swap_requests/<int:request_id>/decline', methods=['DELETE'])
 @api.route('/book_swap_requests/<int:request_id>/decline', methods=['DELETE'])
 @jwt_required()
 def decline_book_swap_request(request_id):

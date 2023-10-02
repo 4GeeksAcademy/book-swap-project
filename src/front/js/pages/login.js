@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import bookswaplogo from "../../img/logo-final-project.png";
 import "../../styles/forms.css";
+import { Navigate } from "react-router-dom"
+
 
 export const Login = () => {
     const { store, actions } = useContext(Context);
@@ -11,11 +13,17 @@ export const Login = () => {
 
     const loginFunction = (e) => {
         e.preventDefault();
-
+        
         actions.login(email, password);
+        
     }
-
+   
     return (
+        actions.isLoggedIn() ? (
+            <Navigate
+            to="/PublicProfile"
+          />
+        ) : 
         <div className="container text-center">
             <img src={bookswaplogo} alt="bookswap" height="100" />
             <div className="row justify-content-center">
@@ -34,7 +42,7 @@ export const Login = () => {
                         <div className="col-12 text-center">
                             <button type="submit" className="btn loginbtn">Log in</button>
                             <div className="container mt-3">
-                                <a href="/reset-password">Forfot your password?</a>
+                                <a href="/reset-password">Forgot your password?</a>
                             </div>
                         </div>
                     </form>

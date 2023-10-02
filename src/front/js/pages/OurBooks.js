@@ -4,14 +4,24 @@ import { Link } from "react-router-dom";
 
 export const OurBooks = () => {
     const { store, actions } = useContext(Context);
-    const [genres, setGenres] = useState([])
+    const [genres, setGenres] = useState([]);
     const [books, setBooks] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
-        actions.getAllBooks(setBooks)
-        actions.getGenres(setGenres)
-    }, [])
 
+        actions.getAllBooks(booksData => {
+            setBooks(booksData);
+        });
+        actions.getGenres(setGenres);
+    }, []);
+
+    const getCurrentPageBooks = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        return books.slice(startIndex, endIndex);
+    };
 
     return (
         <div className="container mt-5">
@@ -61,14 +71,13 @@ export const OurBooks = () => {
                 </div>
                 <hr className="my-4 bold-hr" />
             </div>
-            {books.map((list, index) => (
-                <div>
-                    {list.books.map((book, index) => (
+            {getCurrentPageBooks().map((book, index) => (
+                <div key={index}>
                         <div className="books" style={{ width: "50rem" }}>
                             <div className="card_wishlist">
                                 <div className="row g-0">
                                     <div className="col-md-4">
-                                        <img src="..." className="card-img-top" alt="..." />
+                                        <img src={book.book_image} className="card-img-top my-2" alt="..." style={{ height: "40", width: "10rem" }} />
                                     </div>
                                     <div className="col-md-8">
                                         <div className="card-body">
@@ -97,13 +106,25 @@ export const OurBooks = () => {
                                 </div>
                             </div>
                         </div>
-                    ))
-                    }
                 </div>
             ))}
 
             <div className="next_page text-end">
-                <span>Next Page</span>
+                <button
+                    className="btn btn-link"
+                    onClick={() => setCurrentPage(prevPage => Math.max(prevPage - 1, 1))}
+                    disabled={currentPage === 1}
+                >
+                    Previous Page
+                </button>
+                <span className="mx-2">Page {currentPage}</span>
+                <button
+                    className="btn btn-link"
+                    onClick={() => setCurrentPage(prevPage => prevPage + 1)}
+                    disabled={currentPage === Math.ceil(books.length / itemsPerPage)}
+                >
+                    Next Page
+                </button>
             </div>
         </div>
     );
