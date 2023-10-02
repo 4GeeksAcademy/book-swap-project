@@ -5,8 +5,8 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    lastname = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(80), nullable=False)
     profileimg = db.Column(db.String(64), nullable=False, default='rigo-baby.jpg')
     is_active = db.Column(db.Boolean, default=True) 
@@ -18,6 +18,7 @@ class User(db.Model):
             "email": self.email,
             # Do not serialize the password; it's a security breach
         }
+    
 class Books(db.Model):
   book_id = db.Column(db.Integer, primary_key=True)
   title = db.Column(db.String(150), nullable=False)
@@ -41,6 +42,7 @@ class Books(db.Model):
       "total_ratings": self.total_ratings,
       "cover_img": self.cover_img,
     }
+  
 class BookGoals(db.Model):
   book_goal_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -55,6 +57,7 @@ class BookGoals(db.Model):
       "number_of_books": self.number_of_books,
       "percentage": self.percentage
     }
+  
 class Reviews(db.Model):
   review_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -71,6 +74,7 @@ class Reviews(db.Model):
       "review": self.review,
       "rating": self.rating
     }
+  
 class BookRecommendations(db.Model):
   recommendation_id = db.Column(db.Integer, primary_key=True)
   user1_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -85,6 +89,7 @@ class BookRecommendations(db.Model):
       "user2_id": self.user2_id,
       "recommended_book_id": self.recommended_book_id,
     }
+  
 class BookSwapRequest(db.Model):
   request_id = db.Column(db.Integer, primary_key=True)
   sender_user_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -101,6 +106,7 @@ class BookSwapRequest(db.Model):
       "book_id": self.book_id,
       "request_status": self.request_status
     }
+  
 class Friendship(db.Model):
   friendship_id = db.Column(db.Integer, primary_key=True)
   user1_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -115,6 +121,7 @@ class Friendship(db.Model):
       "user2_id": self.user2_id,
       "friendship_status": self.friendship_status,
     }
+  
 class Wishlist(db.Model):
   wishlist_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -127,6 +134,7 @@ class Wishlist(db.Model):
       "user_id": self.user_id,
       "book_id": self.book_id,
     }
+  
 class BookOwner(db.Model):
   book_owner_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column (db.Integer, db.ForeignKey("user.user_id"), nullable=False)

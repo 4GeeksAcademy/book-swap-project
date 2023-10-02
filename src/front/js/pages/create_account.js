@@ -6,12 +6,14 @@ import "../../styles/forms.css";
 export const CreateAccount = () => {
     const { store, actions } = useContext(Context);
 
+
     const [username, setUsername] = useState("");
     const [profileimg, setProfileimg] = useState("");
     const [name, setName] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
 
     const signUpFunction = (e) => {
         e.preventDefault();
@@ -46,7 +48,7 @@ export const CreateAccount = () => {
 
                         <div className="col-md-6">
                             <label className="form-label" for="lastname">And your last name?</label>
-                            <input type="text" onChange={(e) => setLastname(e.target.value)} className="form-control" id="lastname" placeholder="Write your name" required />
+                            <input type="text" onChange={(e) => setLastname(e.target.value)} className="form-control" id="lastname" placeholder="Write your last name" required />
                         </div>
 
                         <div className="col-12">
