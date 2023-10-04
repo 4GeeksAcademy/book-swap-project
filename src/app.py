@@ -11,7 +11,7 @@ from api.models import db, User , Books, BookGoals, BookOwner, BookRecommendatio
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, create_access_token
 from flask_mail import Mail, Message
 from api.models import User
 
@@ -36,7 +36,7 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": 'bookswapfinalproject@gmail.com',
+    "MAIL_USERNAME": 'teest4geeks12@gmail.com',
     "MAIL_PASSWORD": 'ahyz rgmy igtb yclg'
 }
 app.config.update(mail_settings)
@@ -77,19 +77,22 @@ def serve_any_other_file(path):
     return response
 
 # token-login reset password
-@app.route('api/sendemail', methods=['POST'])
+@app.route('/api/sendemail', methods=['POST'])
 def send_email():
     email = request.json.get("email", None)
-    
+    print(email)
     user = User.query.filter_by(email=email).first()
-    if not user or not user.check_password(password):
+    if user is None: 
         return jsonify({"message": "Invalid email or password"}), 401
+    
+    token = create_access_token(identity=user.email)
+    link = "https://stunning-meme-4xw5pvwrvq4hj47v-3000.app.github.dev/new-password?token=" + token
 
     message = Message(
         subject="Reset your password",
         sender=app.config.get("MAIL_USERNAME"),
         recipients=[email],
-        body="This is a test email"
+        html="Reset your password in this link: <a href='" + link + "'> LINK</a>"
     )
     mail.send(message)
 

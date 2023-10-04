@@ -23,7 +23,7 @@ export const BookDetails = () => {
 			<ModalReview />
 			<div className="container d-flex justify-content-center">
 				<div className="bookcover col-md-6 text-center">
-					<img className="bookcoverimg" src={bookInfo.list_image} />
+					<img className="bookcoverimg" src={bookInfo.book_image} />
 				</div>
 
 				<div className="bookdetails col-md-6">

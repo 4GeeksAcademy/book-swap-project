@@ -18,6 +18,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			],
 
 			token: null,
+			books: [],
 			//user: {},
 			//friendship: [],
 			//wishlist: [],
@@ -70,10 +71,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						else throw Error('Something went wrong creating the account')
 					})
 					.then(data => {
-						console.log(data)
+						if (data && data.message == "User created successfully") window.location.replace('/login')
+
 					})
 					.catch(error => {
-						console.log(error)
+						alert(error)
 					})
 			},
 
@@ -278,10 +280,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						if (data && data.results && data.results.lists) {
 							const books = data.results.lists.map(list => list.books).flat();
+							const store = getStore()
+							setStore({ books: store.books.concat(books) })
 							setBooks(books);
 						}
 					})
 					.catch(error => {
+						alert("ERROR: Something went wrong");
+					});
+			},
+
+			getBookInformationById: (isbn, setBookInfo) => {
+				fetch(`https://api.nytimes.com/svc/books/v3/lists/best-sellers/history.json?api-key=${process.env.BOOK_API_KEY} & isbn=${isbn}`)
+					.then(response => {
+						if (response.ok) return response.json();
+						else throw Error('Something went wrong');
+					})
+					.then(data => {
+						console.log(data)
+						if (data && data.results && data.results.length > 0) {
+							const store = getStore()
+							let currentBook = store.books.find(b => { return b.title.toLowerCase() == data.results[0].title.toLowerCase() })
+							if (currentBook && currentBook.book_image) data.results[0].book_image = currentBook.book_image
+							setBookInfo(data.results[0])
+						}
+					})
+					.catch(error => {
+						console.log(error)
 						alert("ERROR: Something went wrong");
 					});
 			},
@@ -386,6 +411,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						if (data && data.msg == "success") alert("Check your inbox")
+					})
+					.catch(error => {
+						alert("Error: Something went wrong")
+					})
+			},
+
+			resetPassword: (token, password, alert) => {
+				var options = {
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${token}`
+					},
+					body: JSON.stringify({ password: password })
+				}
+
+				fetch(process.env.BACKEND_URL + 'api/resetpassword', options)
+
+					.then(response => {
+						if (response.ok) return response.json()
+						else throw Error('Something went wrong')
+					})
+					.then(data => {
+						if (data && data.msg == "success") alert("Password updated successfully")
 					})
 					.catch(error => {
 						alert("Error: Something went wrong")

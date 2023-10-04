@@ -8,7 +8,6 @@ import { CreateAccount } from "./pages/create_account";
 import { Login } from "./pages/login"
 import { Reset } from "./pages/reset_password";
 import { BookDetails } from "./pages/book_details";
-import { Reset } from "./pages/reset_password";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { ProfileSettings } from "./pages/ProfileSettings";
@@ -24,6 +23,7 @@ import { BookCarousel } from "./component/BookCarousel";
 import { TargetCard } from "./component/targetCard";
 import { ProfileOne } from "./component/ProfileOne";
 import { ProfileTwo } from "./component/ProfileTwo";
+import NewPassword from "./pages/new_password";
 
 
 //create your first component
@@ -45,6 +45,7 @@ const Layout = () => {
                         <Route element={<Login />} path="/login" />
                         <Route element={<BookDetails />} path="/book-details/:id" />
                         <Route element={<Reset />} path="/reset-password" />
+                        <Route element={<NewPassword />} path="/new-password" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<ProfileSettings />} path="/ProfileSettings" />
                         <Route element={<Wishlist />} path="/Wishlist" />

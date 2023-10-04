@@ -1,22 +1,20 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
-
-
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    lastname = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    profileimg = db.Column(db.String(64), nullable=False, default='rigo-baby.jpg')
+    profileimg = db.Column(db.String(400), nullable=False, default='rigo-baby.jpg')
     is_active = db.Column(db.Boolean, default=True) 
     def __repr__(self):
         return f'<user {self.email}>'
     def serialize(self):
         return {
-            "user_id": self.id,
+            "user_id": self.user_id,
             "email": self.email,
             "name": self.name,
             "lastname": self.lastname,
@@ -49,7 +47,6 @@ class Books(db.Model):
       "total_ratings": self.total_ratings,
       "cover_img": self.cover_img,
     }
-  
 class BookGoals(db.Model):
   book_goal_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
@@ -64,16 +61,15 @@ class BookGoals(db.Model):
       "number_of_books": self.number_of_books,
       "percentage": self.percentage
     }
-  
 class Reviews(db.Model):
- review_id = db.Column(db.Integer, primary_key=True)
- user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
- book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
- review = db.Column (db.String(200))
- rating = db.Column (db.Integer, nullable=False)
- def __repr__(self):
-    return f'&#60;Reviews {self.review_id}&#62;'
- def serialize(self):
+  review_id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+  book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
+  review = db.Column (db.String(200))
+  rating = db.Column (db.Integer, nullable=False)
+  def __repr__(self):
+    return f'<Reviews {self.review_id}>'
+  def serialize(self):
     return {
       "review_id": self.review_id,
       "user_id": self.user_id,
@@ -165,4 +161,3 @@ class Genres(db.Model):
       "genre_id": self.genre_id,
       "genre_name": self.genre_name,
     }
-

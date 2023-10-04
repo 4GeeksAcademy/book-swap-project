@@ -96,7 +96,7 @@ export const OurBooks = () => {
                                             </div>
                                             <div className="row">
                                                 <div className="col">
-                                                    <Link to="/book_details" className="view_more">
+                                                    <Link to={`/book-details/${book.primary_isbn13}`} className="view_more">
                                                         <i className="fas fa-plus"></i> View More
                                                     </Link>
                                                 </div>

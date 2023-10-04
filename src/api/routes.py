@@ -7,7 +7,6 @@ from flask import Flask, request, jsonify, Blueprint, redirect, url_for
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import get_jwt_identity, create_access_token, jwt_required, JWTManager
 from io import BytesIO
-from flask import Flask, render_template, request, send_file
 
 api = Blueprint('api', __name__)
 
@@ -340,3 +339,20 @@ def add_review(book_id):
 def get_average_rating(book_id):
     avg_rating = db.session.query(db.func.avg(Reviews.rating)).filter(Reviews.book_id == book_id).scalar()
     return jsonify({"average_rating": avg_rating}), 200
+
+
+@api.route('/api/resetpassword', methods=['POST'])
+@jwt_required()
+def reset_password():
+    email = get_jwt_identity()
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email).first()
+    if user is None: 
+        return jsonify({"message": "Invalid email or password"}), 401
+
+    user.password = password
+    db.session.commit()
+
+
+    return jsonify({ "msg": "success" }), 200
