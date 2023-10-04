@@ -341,7 +341,7 @@ def get_average_rating(book_id):
     return jsonify({"average_rating": avg_rating}), 200
 
 
-@api.route('/api/resetpassword', methods=['POST'])
+@api.route('/resetpassword', methods=['POST'])
 @jwt_required()
 def reset_password():
     email = get_jwt_identity()
