@@ -8,19 +8,18 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from api.utils import APIException, generate_sitemap
 from api.models import db, User , Books, BookGoals, BookOwner, BookRecommendations, BookSwapRequest, Friendship, Wishlist, Genres, Reviews
-from api.models import db, User , Books, BookGoals, BookOwner, BookRecommendations, BookSwapRequest, Friendship, Wishlist, Genres, Reviews
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail, Message
+from api.models import User
 
 #from models import Person
-
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
@@ -32,18 +31,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type = True)
 db.init_app(app)
 
-app.config["JWT_SECRET_KEY"] = "super-secret"
-jwt = JWTManager(app)
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": 'bookswapfinalproject@gmail.com',
+    "MAIL_PASSWORD": 'ahyz rgmy igtb yclg'
+}
+app.config.update(mail_settings)
+mail = Mail(app)
+
 
 app.config["JWT_SECRET_KEY"] = "super-secret"
 jwt = JWTManager(app)
-
 # Allow CORS requests to this API
 CORS(app)
-
 # add the admin
 setup_admin(app)
-
 # add the admin
 setup_commands(app)
 
@@ -71,6 +76,25 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0 # avoid cache memory
     return response
 
+# token-login reset password
+@app.route('api/sendemail', methods=['POST'])
+def send_email():
+    email = request.json.get("email", None)
+    
+    user = User.query.filter_by(email=email).first()
+    if not user or not user.check_password(password):
+        return jsonify({"message": "Invalid email or password"}), 401
+
+    message = Message(
+        subject="Reset your password",
+        sender=app.config.get("MAIL_USERNAME"),
+        recipients=[email],
+        body="This is a test email"
+    )
+    mail.send(message)
+
+
+    return jsonify({ "msg": "success" }), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

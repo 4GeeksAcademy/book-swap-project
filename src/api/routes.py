@@ -24,6 +24,7 @@ def create_user():
     existing_user = User.query.filter_by(email=data.get("email")).first()
     if existing_user:
         return jsonify({"message": "Email already registered"}), 401
+        
     new_user = User(
         email=data.get("email"),
         username=data.get("username"),
@@ -35,9 +36,37 @@ def create_user():
     )
 
     print(new_user)
+    print(new_user)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"message": "User created successfully"}), 201
+
+# Route to update user
+@api.route('/update_user', methods=['PUT'])
+@jwt_required()
+def update_user():
+    data = request.get_json()
+    print(data)
+    user_id = get_jwt_identity()
+    if user_id is None:
+        return jsonify({"User not authenticated"}), 401
+    user = User.query.get(user_id)
+    if not data:
+        return jsonify({"message": "Invalid request data"}), 400
+    if data.get("email", None): 
+        user.email=data["email"]
+    if data.get("name", None): 
+        user.name=data["name"]
+    if data.get("lastname", None): 
+        user.lastname=data["lastname"]
+    if data.get("profileimg", None): 
+        user.profileimg=data["profileimg"]
+    if data.get("currentpassword", None) and data.get("newpassword", None):
+        if user.password == data["currentpassword"]:
+            user.password=data["newpassword"]
+    print(data)
+    db.session.commit()
+    return jsonify({"message": "User updated successfully"}), 201
 
 # Route for token
 @api.route('/token', methods=['POST'])
@@ -81,7 +110,7 @@ def get_user_information():
     user = User.query.get(user_id)
     if user is None:
         return jsonify({"User not found"}), 404
-    return jsonify(user), 200
+    return jsonify(user.serialize()), 200
 
 # DELETE user
 @api.route('/users/<int:user_id>', methods=['DELETE'])
@@ -198,6 +227,29 @@ def get_all_friendships():
     results = [friendship.serialize() for friendship in friendships]
     return jsonify(results), 200
 
+# POST to add friend
+@api.route('/friend_requests/<int:user_id>', methods=['POST'])
+@jwt_required()
+def add_friend_request(user_id):
+    request_user_id = get_jwt_identity()
+    if request_user_id is None:
+        return jsonify({"User not authenticated"}), 401
+    request_user = User.query.get(request_user_id)
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({"User not found"}), 404
+    existing_friendship = Friendship.query.filter_by(user1_id=request_user_id, user2_id=user_id).first()
+    if existing_friendship:
+        return jsonify({"Friendship already requested"}), 400
+    new_request = Friendship(
+        user1_id= request_user_id,
+        user2_id= user_id,
+        friendship_status="Pending",
+    )
+    db.session.add(new_request)
+    db.session.commit()
+    return jsonify(new_request.serialize()), 201
+
 # POST to accept friend request
 @api.route('/friend_requests/<int:request_id>/accept', methods=['POST'])
 @jwt_required()
@@ -269,3 +321,22 @@ def decline_book_recommendation(recommendation_id):
     db.session.delete(recommendation)
     db.session.commit()
     return jsonify({"Book recommendation declined"}), 200
+
+#POST to get review in the database
+@api.route('/books/<int:book_id>/review', methods=['POST'])
+@jwt_required()
+def add_review(book_id):
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    rating = data.get('rating')
+    review = data.get('review')
+    new_review = Reviews(book_id=book_id, user_id=user_id, rating=rating, review=review)
+    db.session.add(new_review)
+    db.session.commit()
+    return jsonify({"message": "Review added successfully"}), 201
+
+# GET to get average rating for a book
+@api.route('/books/<int:book_id>/average_rating', methods=['GET'])
+def get_average_rating(book_id):
+    avg_rating = db.session.query(db.func.avg(Reviews.rating)).filter(Reviews.book_id == book_id).scalar()
+    return jsonify({"average_rating": avg_rating}), 200

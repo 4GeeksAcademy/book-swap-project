@@ -6,6 +6,7 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { CreateAccount } from "./pages/create_account";
 import { Login } from "./pages/login"
+import { Reset } from "./pages/reset_password";
 import { BookDetails } from "./pages/book_details";
 import { Reset } from "./pages/reset_password";
 import { Demo } from "./pages/demo";
@@ -31,7 +32,7 @@ const Layout = () => {
     // you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
     const basename = process.env.BASENAME || "";
 
-    if(!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL/ >;
+    if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
     return (
         <div>
@@ -42,7 +43,7 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<CreateAccount />} path="/create-account" />
                         <Route element={<Login />} path="/login" />
-                        <Route element={<BookDetails />} path="/book-details" />
+                        <Route element={<BookDetails />} path="/book-details/:id" />
                         <Route element={<Reset />} path="/reset-password" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<ProfileSettings />} path="/ProfileSettings" />
@@ -54,6 +55,7 @@ const Layout = () => {
                         <Route element={<TargetCard />} path="/targetCard" />
                         <Route element={<ProfileOne />} path="/profileOne" />
                         <Route element={<ProfileTwo />} path="/profileTwo" />
+                        <Route element={<PublicProfile />} path="/PublicProfile/:id" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />

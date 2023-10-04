@@ -1,12 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
+
+
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    name = db.Column(db.String(50), nullable=False)
-    lastname = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    lastname = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     profileimg = db.Column(db.String(64), nullable=False, default='rigo-baby.jpg')
     is_active = db.Column(db.Boolean, default=True) 
@@ -16,8 +18,13 @@ class User(db.Model):
         return {
             "user_id": self.id,
             "email": self.email,
+            "name": self.name,
+            "lastname": self.lastname,
+            "profileimg": self.profileimg,
             # Do not serialize the password; it's a security breach
         }
+    def check_password(self,password):
+      return self.password == password
     
 class Books(db.Model):
   book_id = db.Column(db.Integer, primary_key=True)
@@ -59,14 +66,14 @@ class BookGoals(db.Model):
     }
   
 class Reviews(db.Model):
-  review_id = db.Column(db.Integer, primary_key=True)
-  user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
-  book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
-  review = db.Column (db.String(200))
-  rating = db.Column (db.Integer, nullable=False)
-  def __repr__(self):
-    return f'<Reviews {self.review_id}>'
-  def serialize(self):
+ review_id = db.Column(db.Integer, primary_key=True)
+ user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+ book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
+ review = db.Column (db.String(200))
+ rating = db.Column (db.Integer, nullable=False)
+ def __repr__(self):
+    return f'&#60;Reviews {self.review_id}&#62;'
+ def serialize(self):
     return {
       "review_id": self.review_id,
       "user_id": self.user_id,
@@ -147,6 +154,7 @@ class BookOwner(db.Model):
       "user_id": self.user_id,
       "book_id": self.book_id,
     }
+  
 class Genres(db.Model):
   genre_id = db.Column(db.Integer, primary_key=True)
   genre_name = db.Column(db.String(150), nullable=False)
@@ -157,3 +165,4 @@ class Genres(db.Model):
       "genre_id": self.genre_id,
       "genre_name": self.genre_name,
     }
+

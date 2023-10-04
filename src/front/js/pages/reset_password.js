@@ -6,6 +6,13 @@ import "../../styles/forms.css";
 
 export const Reset = () => {
 	const { store, actions } = useContext(Context);
+    const [email, setEmail] = useState("");
+
+    const resetPassword = (e) => {
+        e.preventDefault();
+
+        actions.sendForgotPasswordEmail(email, alert);
+    }
 
 	return (
 		<div className="container text-center">
@@ -17,13 +24,9 @@ export const Reset = () => {
                             <label for="inputEmail4" className="form-label">Email</label>
                             <input type="email" className="form-control" id="inputEmail4" />
                         </div>
-                        <div className="col-12">
-                            <label for="newPassword" className="form-label">Password</label>
-                            <input type="password" className="form-control" id="newPassword" />
-                        </div>
 
                         <div className="col-12 text-center">
-                            <button type="submit" className="btn loginbtn">Update</button>
+                            <button type="submit" className="btn loginbtn">Submit</button>
                         </div>
                     </form>
                 </div>
