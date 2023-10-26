@@ -19,11 +19,13 @@ export const CreateAccount = () => {
 
     return (
         <div className="container text-center">
+    return (
+        <div className="container text-center">
             <img src={bookswaplogo} alt="bookswap" height="100" />
             <div className="row justify-content-center">
                 <div className="createaccountform  col-md-6">
 
-                    <form className="row g-3 text-start" onSubmit={signUpFunction}>
+                    <form className="row g-3 text-start" method="POST" action="/register" enctype="multipart/form-data" onSubmit={signUpFunction}>
 
                         <div className="col-md-6">
                             <label className="form-label" for="username">Choose Your Username</label>
@@ -59,6 +61,8 @@ export const CreateAccount = () => {
                     </form>
                 </div>
             </div>
+        </div>
+    );
         </div>
     );
 };

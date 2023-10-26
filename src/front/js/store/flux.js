@@ -126,6 +126,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						console.log(error);
 					});
+					.then(response => {
+						if (!response.ok) {
+							throw Error("Failed to fetch users");
+						}
+						return response.json();
+					})
+					.then(data => {
+						setStore({ users: data });
+					})
+					.catch(error => {
+						console.log(error);
+					});
 			},
 
 			loadDataFriend: (id, setFriend) => {
@@ -143,6 +155,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(error);
 					});
 			},
+
+
 
 
 			getAllBooks: (setBooks) => {
@@ -174,22 +188,52 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						alert("ERROR: Something went wrong");
 					})
+					.then(response => {
+						if (response.ok) return response.json();
+						else throw Error('Something went wrong');
+					})
+					.then(data => {
+						if (data && data.results) setGenres(data.results);
+					})
+					.catch(error => {
+						alert("ERROR: Something went wrong");
+					})
 			},
 
 			addWishlist: (wishlist) => {
 				//get the store
 				const store = getStore();
 
+
 				//we have to loop the entire demo array to look for the respective index
 				//and add new favorite
 
+
 				const newWishlist = [...store.wishlist, wishlist];
+
+
 
 
 				//reset the global store
 				setStore({ wishlist: newWishlist });
 
 			},
+
+			},
+
+			deleteWishlist: (index) => {
+				//get the store
+				const store = getStore();
+
+				//we have to loop the entire demo array to look for the respective index
+				//and remove the favorite
+				const newWishlist = store.wishlist.filter((wishlist, i) => {
+					return index !== i;
+				});
+
+				//reset the global store
+				setStore({ wishlist: newWishlist });
+			}
 
 			deleteWishlist: (index) => {
 				//get the store

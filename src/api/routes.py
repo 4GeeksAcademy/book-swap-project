@@ -20,19 +20,24 @@ api = Blueprint('api', __name__)
 def create_user():
     data = request.get_json()
     print(data)
+    print(data)
     if not data:
         return jsonify({"message": "Invalid request data"}), 400
     # Check if the provided email already exists in the database
     existing_user = User.query.filter_by(email=data.get("email")).first()
     if existing_user:
         return jsonify({"message": "Email already registered"}), 401
+        return jsonify({"message": "Email already registered"}), 401
     new_user = User(
         email=data.get("email"),
         username=data.get("username"),
+        name=data.get("name"),
+        lastname=data.get("lastname"),
         password=data.get("password"),
         is_active=True
     )
 
+    print(new_user)
     print(new_user)
     db.session.add(new_user)
     db.session.commit()
@@ -60,6 +65,7 @@ def get_all_users():
     return jsonify(user_list), 200
 # GET one user public version
 @api.route('/users/<int:user_id>', methods=['GET'])
+@api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -67,6 +73,8 @@ def get_user(user_id):
         return jsonify(user.serialize()), 200
     else:
         return jsonify({"User not found"}), 404
+# GET user info
+@api.route('/user_information', methods=['GET'])
 # GET user info
 @api.route('/user_information', methods=['GET'])
 @jwt_required()
@@ -92,7 +100,6 @@ def delete_user(user_id):
         return jsonify({"User deleted successfully"}), 200
     else:
         return jsonify({"User not found"}), 404
-    
 # GET all books
 @api.route('/books', methods=['GET'])
 @jwt_required()
