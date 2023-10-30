@@ -334,6 +334,12 @@ def add_review(book_id):
     db.session.commit()
     return jsonify({"message": "Review added successfully"}), 201
 
+# GET to get all the reviews from a specific book
+@api.route('/books/<int:book_id>/reviews', methods=['GET'])
+def get_reviews(book_id):
+    reviews = Reviews.query.filter_by(book_id=book_id).all()
+    return jsonify([review.serialize() for review in reviews]), 200
+
 # GET to get average rating for a book
 @api.route('/books/<int:book_id>/average_rating', methods=['GET'])
 def get_average_rating(book_id):

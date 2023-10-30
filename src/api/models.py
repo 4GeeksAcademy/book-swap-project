@@ -65,7 +65,7 @@ class Reviews(db.Model):
   review_id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
   book_id = db.Column (db.Integer, db.ForeignKey("books.book_id"), nullable=False)
-  review = db.Column (db.String(200))
+  review = db.Column (db.String(500))
   rating = db.Column (db.Integer, nullable=False)
   def __repr__(self):
     return f'<Reviews {self.review_id}>'
@@ -161,3 +161,4 @@ class Genres(db.Model):
       "genre_id": self.genre_id,
       "genre_name": self.genre_name,
     }
+  

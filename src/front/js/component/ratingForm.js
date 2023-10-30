@@ -1,21 +1,16 @@
 import { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
-const { store, actions } = useContext(Context);
-
-
 import "../../styles/ratingform.css";
 
-const RatingForm = () => {
+const RatingForm = (props) => {
+  const { store, actions } = useContext(Context);
   const [rating, setRating] = useState(0);
   const [opinion, setOpinion] = useState('');
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Assuming you have access to the bookId from the page or via props
     const bookId = props.bookId;
-
     actions.submitReview(bookId, rating, opinion);
   };
 
