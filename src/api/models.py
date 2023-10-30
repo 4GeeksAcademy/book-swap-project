@@ -33,6 +33,7 @@ class User(db.Model):
         return self.password == password
 
 
+
 class Books(db.Model):
     book_id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
@@ -95,6 +96,7 @@ class Reviews(db.Model):
     def __repr__(self):
         return f'<Reviews {self.review_id}>'
 
+
     def serialize(self):
         return {
             "review_id": self.review_id,
@@ -103,7 +105,6 @@ class Reviews(db.Model):
             "review": self.review,
             "rating": self.rating
         }
-
 
 class BookRecommendations(db.Model):
     recommendation_id = db.Column(db.Integer, primary_key=True)
@@ -124,7 +125,6 @@ class BookRecommendations(db.Model):
             "user2_id": self.user2_id,
             "recommended_book_id": self.recommended_book_id,
         }
-
 
 class BookSwapRequest(db.Model):
     request_id = db.Column(db.Integer, primary_key=True)
@@ -148,7 +148,6 @@ class BookSwapRequest(db.Model):
             "book_id": self.book_id,
             "request_status": self.request_status
         }
-
 
 class Friendship(db.Model):
     friendship_id = db.Column(db.Integer, primary_key=True)
@@ -214,7 +213,6 @@ class BookOwner(db.Model):
             "user_id": self.user_id,
             "book_id": self.book_id,
         }
-
 
 class Genres(db.Model):
     genre_id = db.Column(db.Integer, primary_key=True)

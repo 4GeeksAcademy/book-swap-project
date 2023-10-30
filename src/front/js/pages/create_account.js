@@ -20,6 +20,8 @@ export const CreateAccount = () => {
 
     return (
         <div className="container text-center">
+    return (
+        <div className="container text-center">
             <img src={bookswaplogo} alt="bookswap" height="100" />
             <div className="row justify-content-center">
                 <div className="createaccountform  col-md-6">
@@ -73,6 +75,8 @@ export const CreateAccount = () => {
                     </form>
                 </div>
             </div>
+        </div>
+    );
         </div>
     );
 };

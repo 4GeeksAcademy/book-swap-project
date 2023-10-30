@@ -227,6 +227,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						console.error(error);
 					});
+					.then(response => {
+						if (!response.ok) {
+							throw Error("Failed to fetch users");
+						}
+						return response.json();
+					})
+					.then(data => {
+						setStore({ users: data });
+					})
+					.catch(error => {
+						console.log(error);
+					});
 			},
 			// action that it will run after the verifyIfUserLoggedIn and retrieve user data
 			getUserById: (id) => {
@@ -485,6 +497,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					headers: headers,
 				};
 
+
 				return fetch(process.env.BACKEND_URL + `api/wishlist/book/${bookId}`, options)
 					.then((response) => {
 						if (response.ok) {
@@ -525,6 +538,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			//get books for the homepage caroussel
 			getAllBooksCaroussel: (setBooks) => {
+
 				fetch(`https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${process.env.BOOK_API_KEY}`)
 					.then(response => {
 						if (response.ok) return response.json();
@@ -573,7 +587,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						alert("ERROR: Something went wrong");
 					})
+					.then(response => {
+						if (response.ok) return response.json();
+						else throw Error('Something went wrong');
+					})
+					.then(data => {
+						if (data && data.results) setGenres(data.results);
+					})
+					.catch(error => {
+						alert("ERROR: Something went wrong");
+					})
 			},
+
 
 
 			submitReview: (bookId, rating, opinion) => {
@@ -591,6 +616,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify(reviewData)
 				};
 
+
 				fetch(`${process.env.BACKEND_URL}/books/${bookId}/review`, options)
 					.then(response => {
 						if (response.ok) return response.json()
@@ -604,6 +630,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
+
 			getAverageRating: (bookId, setAverageRating) => {
 				fetch(`${process.env.BACKEND_URL}/books/${bookId}/average_rating`)
 					.then(response => {
@@ -616,6 +643,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						console.log(error);
 					});
+			},
+
+      deleteWishlist: (index) => {
+				//get the store
+				const store = getStore();
+
+				//we have to loop the entire demo array to look for the respective index
+				//and remove the favorite
+				const newWishlist = store.wishlist.filter((wishlist, i) => {
+					return index !== i;
+				});
+
+				//reset the global store
+				setStore({ wishlist: newWishlist });
 			},
 
 			sendForgotPasswordEmail: (email, alert) => {
@@ -639,6 +680,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 			},
 
+
 			resetPassword: (token, password, alert) => {
 				var options = {
 					method: 'POST',
@@ -648,6 +690,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					body: JSON.stringify({ password: password })
 				}
+
 
 				fetch(process.env.BACKEND_URL + 'api/resetpassword', options)
 

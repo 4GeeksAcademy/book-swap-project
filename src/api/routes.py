@@ -24,7 +24,7 @@ def create_user():
     existing_user = User.query.filter_by(email=data.get("email")).first()
     if existing_user:
         return jsonify({"message": "Email already registered"}), 401
-
+      
     new_user = User(
         email=data.get("email"),
         username=data.get("username"),
@@ -100,6 +100,7 @@ def get_all_users():
 
 
 @api.route('/users/<int:user_id>', methods=['GET'])
+@api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -111,6 +112,8 @@ def get_user(user_id):
 # GET user info
 
 
+@api.route('/user_information', methods=['GET'])
+# GET user info
 @api.route('/user_information', methods=['GET'])
 @jwt_required()
 def get_user_information():
@@ -135,10 +138,10 @@ def delete_user():
         db.session.commit()
         return jsonify({"message": "User deleted successfully"}), 200
     else:
+
         return jsonify({"message": "User not found"}), 404
 
 # GET all books public, action getAllBooks
-
 
 @api.route('/books', methods=['GET'])
 # @jwt_required()
