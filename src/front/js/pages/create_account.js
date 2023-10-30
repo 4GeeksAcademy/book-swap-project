@@ -8,13 +8,14 @@ export const CreateAccount = () => {
 
     const [username, setUsername] = useState("");
     const [profileimg, setProfileimg] = useState("");
+    const [name, setName] = useState("");
+    const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const signUpFunction = (e) => {
         e.preventDefault();
-        
-        actions.createAccount(username, profileimg, email, password);
+        actions.createAccount(username, profileimg, name, lastname, email, password);
     }
 
     return (
@@ -35,7 +36,20 @@ export const CreateAccount = () => {
                             </div>
                         </div>
 
-                       
+                        <div class="col-md-6">
+                            <label for="profileimg" className="form-label">Choose your profile photo</label>
+                            <input className="form-control" type="text" onChange={(e) => setProfileimg(e.target.value)} id="profileimg" placeholder="Insert here an image URL" required />
+                        </div>
+
+                        <div className="col-md-6">
+                            <label className="form-label" for="name">What's your name?</label>
+                            <input type="text" onChange={(e) => setName(e.target.value)} className="form-control" id="name" placeholder="Write your name" required />
+                        </div>
+
+                        <div className="col-md-6">
+                            <label className="form-label" for="lastname">And your last name?</label>
+                            <input type="text" onChange={(e) => setLastname(e.target.value)} className="form-control" id="lastname" placeholder="Write your name" required />
+                        </div>
 
                         <div className="col-12">
                             <label for="email" className="form-label">Email</label>
