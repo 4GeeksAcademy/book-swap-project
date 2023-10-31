@@ -510,7 +510,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.BACKEND_URL + `api/books?q=${searchTerm}&genre=${genre}`)
 					.then(response => {
 						if (response.ok) return response.json();
-						else throw Error('Something went wrong');
+
 					})
 					.then(data => {
 
@@ -522,7 +522,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					})
 					.catch(error => {
-						alert("ERROR: Something went wrong");
+						console.log(error)
 					});
 			},
 			//get books for the homepage caroussel
@@ -568,23 +568,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.BACKEND_URL + `api/genres`)
 					.then(response => {
 						if (response.ok) return response.json();
-						else throw Error('Something went wrong');
 					})
 					.then(data => {
 						setGenres(data);
 					})
 					.catch(error => {
-						alert("ERROR: Something went wrong");
-					})
-					.then(response => {
-						if (response.ok) return response.json();
-						else throw Error('Something went wrong');
-					})
-					.then(data => {
-						if (data && data.results) setGenres(data.results);
-					})
-					.catch(error => {
-						alert("ERROR: Something went wrong");
+						console.log(error);
 					})
 			},
 

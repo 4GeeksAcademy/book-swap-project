@@ -7,9 +7,9 @@ export const Wishlist = () => {
     const [userWishlist, setUserWishlist] = useState([])
 
 
-    useEffect(()=> {
+    useEffect(() => {
         actions.verifyIfUserLoggedIn();
-    },[])
+    }, [])
 
     useEffect(() => {
         actions.UserWishlist(store.user.user_id).then((data) => {
@@ -17,6 +17,16 @@ export const Wishlist = () => {
         });
 
     }, [store.user])
+
+    const handleDeleteWishlist = (item) => {
+        actions.deleteBookWishlist(item.book_id).then((data) => {
+            if (data) {
+                actions.UserWishlist(store.user.user_id).then((data) => {
+                    setUserWishlist(data);
+                });
+            }
+        });
+    }
 
 
     return (
@@ -67,7 +77,7 @@ export const Wishlist = () => {
                                     </div>
                                     <div className="row">
                                         <div className="col">
-                                            <a href="#" className="trash" onClick={() => actions.deleteBookWishlist(item.book_id)} ><i className="far fa-trash-alt"></i> Remove</a>
+                                            <a href="#" className="trash" onClick={() => handleDeleteWishlist(item)} ><i className="far fa-trash-alt"></i> Remove</a>
                                         </div>
                                     </div>
                                 </div>

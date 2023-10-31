@@ -14,12 +14,10 @@ export const OurBooks = () => {
     
 
     useEffect(() => {
-
-        actions.getAllBooks(booksData => {
-            setBooks(booksData);
-        });
+        actions.getAllBooks(setBooks);
         actions.getGenres(setGenres);
     }, []);
+
 
     const getCurrentPageBooks = () => {
         const startIndex = (currentPage - 1) * itemsPerPage;
