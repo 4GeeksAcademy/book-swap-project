@@ -227,19 +227,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => {
 						console.error(error);
 					});
-					.then(response => {
-						if (!response.ok) {
-							throw Error("Failed to fetch users");
-						}
-						return response.json();
-					})
-					.then(data => {
-						setStore({ users: data });
-					})
-					.catch(error => {
-						console.log(error);
-					});
 			},
+
 			// action that it will run after the verifyIfUserLoggedIn and retrieve user data
 			getUserById: (id) => {
 				const store = getStore();
@@ -645,7 +634,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
-      deleteWishlist: (index) => {
+			deleteWishlist: (index) => {
 				//get the store
 				const store = getStore();
 

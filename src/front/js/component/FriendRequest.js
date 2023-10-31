@@ -31,8 +31,8 @@ export const FriendRequest = () => {
             {friendRequests.map((friend) => (
                 <div className="row align-items-center my-4" key={friend.friendship_id}>
                     <div className="col-md-2">
-                        <h5>{friend.user2.name}</h5>
-                        <img src={friend.user2.profileimg} alt="Profile Icon" style={{ width: "5rem", height: "5rem" }} className="rounded-circle" />
+                        <h5>{friend.user1.name}</h5>
+                        <img src={friend.user1.profileimg} alt="Profile Icon" style={{ width: "5rem", height: "5rem" }} className="rounded-circle" />
                     </div>
                     <div className="col-md-10">
                         <div className="row g-3">

@@ -62,10 +62,10 @@ export const Users = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="card-body">
-                        <h5 className="card-title">{user.name}{user.lastname}</h5>
+                        <h5 className="card-title">{user.name} {user.lastname}</h5>
                         <div className="row">
                           <div className="col">
-                            <button className="btn" onClick={() => handleProfileClick(user.user_id)} style={{ color: "red", textDecoration: "underline", border: "none" }}>View Profile</button>
+                            <button className="btn" onClick={() => handleProfileClick(user.user_id)} style={{ color: "blue", textDecoration: "underline", border: "none" }}>View Profile</button>
                           </div>
                         </div>
                       </div>

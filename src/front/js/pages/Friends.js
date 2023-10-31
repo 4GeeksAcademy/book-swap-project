@@ -17,6 +17,16 @@ export const Friends = () => {
 
   }, [store.user])
 
+  const handleUnfollowFriend = (friend) => {
+    actions.deleteFriend(friend.friendship_id).then((data) => {
+      if (data) {
+        actions.getFriendsList().then((data) => {
+          setFriendsList(data);
+        });
+      }
+    });
+  }
+
   return (
     <div className="friends_box container mt-5" style={{ width: "50rem" }}>
       <div className="container">
@@ -56,10 +66,10 @@ export const Friends = () => {
                     </div>
                     <div className="col-md-6">
                       <div className="card-body">
-                        <h5 className="card-title">{user.name}{user.lastname}</h5>
+                        <h5 className="card-title">{user.name} {user.lastname}</h5>
                         <div className="row">
                           <div className="col">
-                            <button className="btn" onClick={() => actions.deleteFriend(friend.friendship_id)} style={{ color: "red", textDecoration: "underline", border: "none" }}>Delete Friend</button>
+                            <button className="btn" onClick={() => handleUnfollowFriend(friend)} style={{ color: "blue", textDecoration: "underline", border: "none" }}>Unfollow Friend</button>
                           </div>
                         </div>
                       </div>

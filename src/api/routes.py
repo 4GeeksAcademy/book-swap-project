@@ -24,7 +24,7 @@ def create_user():
     existing_user = User.query.filter_by(email=data.get("email")).first()
     if existing_user:
         return jsonify({"message": "Email already registered"}), 401
-      
+
     new_user = User(
         email=data.get("email"),
         username=data.get("username"),
@@ -143,6 +143,7 @@ def delete_user():
 
 # GET all books public, action getAllBooks
 
+
 @api.route('/books', methods=['GET'])
 # @jwt_required()
 def get_all_books():
@@ -228,7 +229,8 @@ def delete_wishlist_book(book_id):
     if user_id is None:
         return jsonify({"message": "User not authenticated"}), 401
 
-    wishlist_item = Wishlist.query.filter_by(user_id=user_id, book_id=book_id).first()
+    wishlist_item = Wishlist.query.filter_by(
+        user_id=user_id, book_id=book_id).first()
 
     if wishlist_item:
         db.session.delete(wishlist_item)
@@ -272,9 +274,9 @@ def add_friend_request(user_id):
 def friend_request():
     request_user_id = get_jwt_identity()
     if request_user_id is None:
-        return jsonify({"User not authenticated"}), 401
+        return jsonify({"message": "User not authenticated"}), 401
     friendship_requests = Friendship.query.filter(
-        Friendship.user1_id == request_user_id, Friendship.friendship_status == 'Pending').all()
+        Friendship.user2_id == request_user_id, Friendship.friendship_status == 'Pending').all()
     for g in friendship_requests:
         print(g.serialize())
         print(g.user2.serialize())
@@ -288,12 +290,12 @@ def friend_request():
 def accept_friend_request(request_id):
     user_id = get_jwt_identity()
     if user_id is None:
-        return jsonify({"User not authenticated"}), 401
+        return jsonify({"message": "User not authenticated"}), 401
     friend_request = Friendship.query.get(request_id)
     if friend_request is None:
-        return jsonify({"Friend request not found"}), 404
-    if friend_request.user1_id != user_id:
-        return jsonify({"Unauthorized to accept this request"}), 403
+        return jsonify({"message": "Friend request not found"}), 404
+    if friend_request.user2_id != user_id:
+        return jsonify({"message": "Unauthorized to accept this request"}), 403
     friend_request.friendship_status = 'Accepted'
     db.session.commit()
     return jsonify(
