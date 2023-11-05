@@ -52,7 +52,7 @@ export const TargetCard = () => {
             </table>
 
             <h3 className="title">
-                <i className="fas fa-percentage" style={{ marginRight: '15px' }}></i>Status<button type="button" className="edit-bio" data-bs-toggle="modal" data-bs-target="#statusModal"><i class="fas fa-plus fa-xs"></i></button>
+                <i className="fas fa-percentage" style={{ marginRight: '15px' }}></i>Status
             </h3>
             <ModalTarget target={statusPercentage} updateTarget={updateStatusTarget} modalId="statusModal" />
             <table className="table table-sm" style={{ width: "15rem" }}>

@@ -6,7 +6,7 @@ from api.models import db, User, Books, BookGoals, BookOwner, BookRecommendation
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import get_jwt_identity, create_access_token, jwt_required, JWTManager
 from io import BytesIO
-from sqlalchemy import or_
+from sqlalchemy import or_ , and_
 
 
 api = Blueprint('api', __name__)
@@ -100,7 +100,6 @@ def get_all_users():
 
 
 @api.route('/users/<int:user_id>', methods=['GET'])
-@api.route('/users/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
@@ -109,10 +108,7 @@ def get_user(user_id):
     else:
         return jsonify({"User not found"}), 404
 
-# GET user info
 
-
-@api.route('/user_information', methods=['GET'])
 # GET user info
 @api.route('/user_information', methods=['GET'])
 @jwt_required()
@@ -280,6 +276,21 @@ def friend_request():
     for g in friendship_requests:
         print(g.serialize())
         print(g.user2.serialize())
+    results = [friendship.serialize() for friendship in friendship_requests]
+    return jsonify(results), 200
+
+# GET my friendships status, action getFriendStatus
+
+
+@api.route('/friend_status/<int:user_id>', methods=['GET'])
+@jwt_required()
+def friend_status(user_id):
+    request_user_id = get_jwt_identity()
+    if request_user_id is None:
+        return jsonify({"message": "User not authenticated"}), 401
+    friendship_requests = Friendship.query.filter(
+     or_(and_(Friendship.user1_id == request_user_id, Friendship.user2_id == user_id ), and_(Friendship.user2_id == request_user_id, Friendship.user1_id == user_id))).all()
+    print(friendship_requests)
     results = [friendship.serialize() for friendship in friendship_requests]
     return jsonify(results), 200
 

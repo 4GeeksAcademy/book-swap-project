@@ -33,7 +33,15 @@ export const PublicProfile = () => {
             actions.getUserById(id).then((data) => {
                 console.log("data", data)
                 setUserInformation(data);
-
+                actions.getFriendStatus(data.user_id).then((data) => {
+                    if (data.length === 0) {
+                        setFriendStatus("None")
+                    }
+                    else {
+                        const friendData = data[0]
+                        setFriendStatus(friendData.friendship_status)
+                    }
+                })
             });
         } else {
             actions.verifyIfUserLoggedIn();
@@ -51,6 +59,17 @@ export const PublicProfile = () => {
             }
         })
     }
+
+    let friendButtonText = "Add Friend"
+    let friendButtonIcon = "fas fa-user-plus mx-2" 
+    if (friendStatus === "Pending") {
+        friendButtonText = "Pending Friend Request"
+    } 
+    else if (friendStatus === "Accepted") {
+        friendButtonText = "Friend"
+        friendButtonIcon = "fas fa-user-friends mx-2"
+    }
+//<i class="fas fa-user-friends"></i>
 
     return userInformation.user_id ? (
         <div className="container">
@@ -108,7 +127,7 @@ export const PublicProfile = () => {
                                 </div>
                                 <div className="row">
                                     <div className="col-md-3">
-                                        {isOwnProfile ? <></> : <button onClick={handleFriendRequest} type="button" className="btn btn-primary mb-4 alert-info-decline"><i class="fas fa-user-plus mx-2"></i>Follow</button>}
+                                        {isOwnProfile ? <></> : <button onClick={handleFriendRequest} type="button" className="btn btn-primary mb-4 alert-info-decline"><i class={friendButtonIcon}></i>{friendButtonText}</button>}
                                     </div>
                                 </div>
                                 <div className="row g-3">

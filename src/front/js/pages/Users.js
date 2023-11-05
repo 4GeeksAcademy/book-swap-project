@@ -32,7 +32,7 @@ export const Users = () => {
         <div className="row">
           <div className="col-6">
             <div className="title">
-              <h1>Network Users</h1>
+              <h1>Users</h1>
             </div>
           </div>
           <div className="col-6">

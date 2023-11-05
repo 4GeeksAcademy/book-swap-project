@@ -392,6 +392,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 			},
 
+			// action that it will run after the button Add Friend is clicked
+			getFriendStatus: (id) => {
+				const store = getStore();
+				const token = store.token;
+				const headers = {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				};
+
+				var options = {
+					method: 'GET',
+					headers: headers,
+				};
+
+				return fetch(process.env.BACKEND_URL + `api/friend_status/${id}`, options)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Something went wrong getting friendship status');
+						}
+						return response.json();
+					})
+					.then(data => {
+						return data
+					})
+					.catch(error => {
+						console.error(error);
+					});
+			},
+
+
 			// delete a friend from your list
 			deleteFriend: (friendship_id) => {
 				const store = getStore();

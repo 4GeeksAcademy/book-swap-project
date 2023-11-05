@@ -69,7 +69,7 @@ export const Friends = () => {
                         <h5 className="card-title">{user.name} {user.lastname}</h5>
                         <div className="row">
                           <div className="col">
-                            <button className="btn" onClick={() => handleUnfollowFriend(friend)} style={{ color: "blue", textDecoration: "underline", border: "none" }}>Unfollow Friend</button>
+                            <button className="btn" onClick={() => handleUnfollowFriend(friend)} style={{ color: "blue", textDecoration: "underline", border: "none" }}>Remove Friend</button>
                           </div>
                         </div>
                       </div>

@@ -9,7 +9,6 @@ import { CreateAccount } from "./pages/create_account";
 import { Login } from "./pages/login"
 import { Reset } from "./pages/reset_password";
 import { BookDetails } from "./pages/book_details";
-import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { ProfileSettings } from "./pages/ProfileSettings";
 import { Wishlist } from "./pages/Wishlist";
